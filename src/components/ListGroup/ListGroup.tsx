@@ -1,4 +1,21 @@
 import { useState } from 'react';
+import './ListGroup.css';
+import styled from 'styled-components';
+
+const List= styled.ul`
+   list-style: none;
+    padding: 0px;
+`;
+
+interface ListItemProps{
+  active: Boolean;
+}
+
+const ListItem = styled.li<ListItemProps>`
+  padding: 5px 0;
+  background: ${props => props.active ? 'blue': 'aquamarine'}
+`;
+
 //{items:[], heading: string}
 interface ListGroupProps {
   items: string[];
@@ -14,7 +31,7 @@ function ListGroup({ items, heading, onSelectItem }: ListGroupProps) {
   // }
 
   // let selectedIndex = 0;
-  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
   // const [name,setName]=useState('');
   return (
     <>
@@ -23,14 +40,17 @@ function ListGroup({ items, heading, onSelectItem }: ListGroupProps) {
       {/* {getMessage()} */}
       {/* {items.length === 0 ? <p>No Items Found</p> : null} */}
       {items.length === 0 && <p>No Items Found</p>}
-      <ul className="list-group">
+      {/* <ul className={[styles.listGroup, styles.container].join(' ')}> */}
+      <List>
         {items.map((item, index) => (
-          <li
-            className={
-              selectedIndex === index
-                ? 'list-group-item active'
-                : 'list-group-item'
-            }
+          // <li
+          <ListItem
+            // className={
+            //   selectedIndex === index
+            //     ? 'list-group-item active'
+            //     : 'list-group-item'
+            // }
+            active={index === selectedIndex}
             key={item}
             onClick={() => {
               setSelectedIndex(index);
@@ -38,9 +58,10 @@ function ListGroup({ items, heading, onSelectItem }: ListGroupProps) {
             }}
           >
             {item}
-          </li>
+            </ListItem>
+          // </li>
         ))}
-      </ul>
+      </List>
     </>
   );
 }
