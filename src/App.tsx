@@ -1,10 +1,13 @@
 // // import ListGroup from './components/ListGroup';
 
-import { useState } from "react";
-import Message from "./components/Message";
-import { AiTwotoneHourglass } from "react-icons/ai";
-import Navbar from "./components/Navbar";
-import Cart from "./components/Cart";
+import { useState } from 'react';
+import ExpandableText from './components/ExpandableText';
+
+// import { useState } from 'react';
+// import Message from './components/Message';
+// import { AiTwotoneHourglass } from 'react-icons/ai';
+// import Navbar from './components/Navbar';
+// import Cart from './components/Cart';
 
 // import { useState } from 'react';
 // import Alert from './components/Alert';
@@ -49,7 +52,6 @@ import Cart from "./components/Cart";
 // }
 
 // export default App;
-
 
 /******************************************************************************************************************/
 
@@ -97,7 +99,6 @@ import Cart from "./components/Cart";
 
 // export default App;
 
-
 /******************************************************************************************************************/
 
 // const App=()=>{
@@ -111,7 +112,6 @@ import Cart from "./components/Cart";
 //   );
 // }
 // export default App;
-
 
 /******************************************************************************************************************/
 
@@ -142,7 +142,6 @@ import Cart from "./components/Cart";
 // }
 
 // export default App;
-
 
 /******************************************************************************************************************/
 
@@ -197,9 +196,7 @@ import Cart from "./components/Cart";
 
 // export default App;
 
-
 /******************************************************************************************************************/
-
 
 //Updating Array of Objects
 
@@ -218,7 +215,7 @@ import Cart from "./components/Cart";
 //   return (
 //     <div>
 //       <button onClick={handleClick}>Click Me</button>
-      
+
 //     </div>
 //   )
 // }
@@ -240,7 +237,7 @@ import Cart from "./components/Cart";
 
 //   const handleClick=()=>{
 //     //setBugs(bugs.map(bug => bug.id === 1 ? {...bug, fixed: true}: bug));
-    
+
 //     setBugs(produce(draft => {
 //       const bug = draft.find(bug=> bug.id ===1);
 //       if(bug) bug.fixed = true;
@@ -261,13 +258,121 @@ import Cart from "./components/Cart";
 
 //Sharing state between Components
 
-function App(){
-  const [cartItems, setCartItems]= useState(['Product1','Product2']);
+// function App(){
+//   const [cartItems, setCartItems]= useState(['Product1','Product2']);
 
+//   return (
+//     <div>
+//       <Navbar cartItemsCount={cartItems.length}/>
+//       <Cart cartItems={cartItems} onClear={()=> setCartItems([])}/>
+//     </div>
+//   );
+// }
+
+// export default App;
+
+/******************************************************************************************************************/
+
+//Exercise 1
+
+// function App() {
+//   const [game, setGame] = useState({
+//     id: 1,
+//     player: {
+//       name: 'John',
+//     },
+//   });
+
+//   const handleClick = () => {
+//     setGame({ ...game, player: { ...game.player, name: 'Bob' } });
+//     console.log(game);
+//   };
+
+//   return (
+//     <div>
+//       <button onClick={handleClick}>Click Me</button>
+//     </div>
+//   );
+// }
+
+// export default App;
+
+/******************************************************************************************************************/
+
+//Exercise 2
+
+// function App() {
+//   const [cart, setcart] = useState({
+//     name: 'Spicy Pepperoni',
+//     toppings: ['Mushroom'],
+//   });
+
+//   const handleClick = () => {
+//     setcart({ ...cart, toppings: [...cart.toppings, 'Pepperoni'] });
+//   };
+
+//   return (
+//     <div>
+//       <button onClick={handleClick}>Click Me</button>
+//     </div>
+//   );
+// }
+
+// export default App;
+
+/******************************************************************************************************************/
+
+// Exercise 3
+
+// function App() {
+//   const [cart, setCart] = useState({
+//     discount: 0.1,
+//     items: [
+//       { id: 1, title: 'Product 1', quantity: 1 },
+//       { id: 2, title: 'Product 2', quantity: 1 },
+//     ],
+//   });
+
+//   const handleClick = () => {
+//     setCart({
+//       ...cart,
+//       items: cart.items.map((item) =>
+//         item.id === 1 ? { ...item, quantity: item.quantity + 1 } : item
+//       ),
+//     });
+//   };
+
+//   return (
+//     <div>
+//       <button onClick={handleClick}>Click Me</button>
+//     </div>
+//   );
+// }
+
+// export default App;
+
+/******************************************************************************************************************/
+
+//Exercise 3
+
+function App() {
   return (
     <div>
-      <Navbar cartItemsCount={cartItems.length}/>
-      <Cart cartItems={cartItems} onClear={()=> setCartItems([])}/>
+      {/* <ExpandableText maxChars={100}>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci esse
+        beatae eos voluptas dolorem, animi necessitatibus ad eaque maiores
+        temporibus quas aliquid eveniet eum quos, alias ab, id dolorum
+        architecto quia labore laborum error. Sequi, labore. Perferendis aliquid
+        explicabo veritatis laboriosam dignissimos officiis aperiam blanditiis
+        quam libero, doloribus, aliquam facilis ea rerum recusandae eius, illum
+        ducimus omnis quasi delectus impedit quo voluptatem porro dolores
+        architecto. Atque saepe, blanditiis accusamus reprehenderit tenetur
+        architecto, libero beatae fugiat natus quis excepturi, laboriosam
+        consectetur! Ut itaque vel aspernatur dolores doloremque corporis dicta,
+        recusandae sunt tempore reprehenderit labore! Itaque ex nihil sapiente
+        exercitationem nobis. Adipisci.
+      </ExpandableText> */}
+      <ExpandableText>Hello World!</ExpandableText>
     </div>
   );
 }
