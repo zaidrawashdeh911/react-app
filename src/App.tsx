@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import ExpandableText from './components/ExpandableText';
+import Form from './components/Form';
 
 // import { useState } from 'react';
 // import Message from './components/Message';
@@ -355,24 +356,37 @@ import ExpandableText from './components/ExpandableText';
 
 //Exercise 3
 
+// function App() {
+//    return (
+//     <div>
+//       {/* <ExpandableText maxChars={100}>
+//         Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci esse
+//         beatae eos voluptas dolorem, animi necessitatibus ad eaque maiores
+//         temporibus quas aliquid eveniet eum quos, alias ab, id dolorum
+//         architecto quia labore laborum error. Sequi, labore. Perferendis aliquid
+//         explicabo veritatis laboriosam dignissimos officiis aperiam blanditiis
+//         quam libero, doloribus, aliquam facilis ea rerum recusandae eius, illum
+//         ducimus omnis quasi delectus impedit quo voluptatem porro dolores
+//         architecto. Atque saepe, blanditiis accusamus reprehenderit tenetur
+//         architecto, libero beatae fugiat natus quis excepturi, laboriosam
+//         consectetur! Ut itaque vel aspernatur dolores doloremque corporis dicta,
+//         recusandae sunt tempore reprehenderit labore! Itaque ex nihil sapiente
+//         exercitationem nobis. Adipisci.
+//       </ExpandableText> */}
+//       <ExpandableText>Hello World!</ExpandableText>
+//     </div>
+//   );
+// }
+
+// export default App;
+
+/******************************************************************************************************************/
+
+import './components/index.css';
 function App() {
   return (
     <div>
-      {/* <ExpandableText maxChars={100}>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci esse
-        beatae eos voluptas dolorem, animi necessitatibus ad eaque maiores
-        temporibus quas aliquid eveniet eum quos, alias ab, id dolorum
-        architecto quia labore laborum error. Sequi, labore. Perferendis aliquid
-        explicabo veritatis laboriosam dignissimos officiis aperiam blanditiis
-        quam libero, doloribus, aliquam facilis ea rerum recusandae eius, illum
-        ducimus omnis quasi delectus impedit quo voluptatem porro dolores
-        architecto. Atque saepe, blanditiis accusamus reprehenderit tenetur
-        architecto, libero beatae fugiat natus quis excepturi, laboriosam
-        consectetur! Ut itaque vel aspernatur dolores doloremque corporis dicta,
-        recusandae sunt tempore reprehenderit labore! Itaque ex nihil sapiente
-        exercitationem nobis. Adipisci.
-      </ExpandableText> */}
-      <ExpandableText>Hello World!</ExpandableText>
+      <Form />
     </div>
   );
 }
