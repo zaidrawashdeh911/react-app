@@ -1,4 +1,5 @@
 import React, { FormEvent, useRef, useState } from 'react';
+import {FieldValues, useForm} from 'react-hook-form';
 
 const Form = () => {
   // const nameRef = useRef<HTMLInputElement>(null);
@@ -18,26 +19,41 @@ const Form = () => {
   //   }
   // };
 
-  const [person, setPerson] = useState({
-    name: '',
-    age: 0,
-  });
+  // const form = useForm();
+  const {register, handleSubmit} = useForm();
+  // console.log(register('name'));
+  
+  //When we use the useForm, no need for the useState hook
+  // const [person, setPerson] = useState({
+  //   name: '',
+  //   age: '',
+  // });
 
-  const handleSubmit = (event: FormEvent) => {
-    event.preventDefault();
-    console.log(person);
-  };
-
+  // const handleSubmit = (event: FormEvent) => {
+  //   event.preventDefault();
+  //   console.log(person);
+  // };
+  const onSubmit = (data: FieldValues) => console.log(data);
   return (
-    <form onSubmit={handleSubmit}>
+    // <form onSubmit={handleSubmit(data => console.log(data))}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-3">
         <label htmlFor="name" className="form-label">
           Name
         </label>
         {/* <input ref={nameRef} id="name" type="text" className="form-control" /> */}
-        <input
+        {/* <input
           onChange={(event) =>
             setPerson({ ...person, name: event.target.value })
+          }
+          value={person.name}
+          id="name"
+          type="text"
+          className="form-control"
+        /> */}
+        <input
+          {
+            ...register('name')
           }
           id="name"
           type="text"
@@ -49,10 +65,17 @@ const Form = () => {
           Age
         </label>
         {/* <input ref={ageRef} id="age" type="number" className="form-control" /> */}
-        <input
+        {/* <input
           onChange={(event) =>
-            setPerson({ ...person, age: parseInt(event.target.value) })
+            setPerson({ ...person, age: event.target.value})
           }
+          value={person.age}
+          id="age"
+          type="number"
+          className="form-control"
+        /> */}
+        <input
+          {...register('age')}
           id="age"
           type="number"
           className="form-control"
