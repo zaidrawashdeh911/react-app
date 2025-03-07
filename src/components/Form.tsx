@@ -1,5 +1,24 @@
-import React, { FormEvent, useRef, useState } from 'react';
+// import React, { FormEvent, useRef, useState } from 'react';
 import {FieldValues, useForm} from 'react-hook-form';
+import {z} from 'zod';
+import {zodResolver} from '@hookform/resolvers/zod';
+
+const schema = z.object({
+  // name:z.string().min(3),
+  name:z.string().min(8,{message:'Name must be at least 3 characters'}),
+  age: z.number({invalid_type_error:'Age field is required'})
+  .min(18,{message:'Age must be between 18 and 30'})
+  .max(30,{message:'Age must be between 18 and 30'})
+});
+
+type FormData= z.infer<typeof schema>;
+
+// when implementing the schema of zod object
+// you dont need to implement the interface anymore
+// interface FormData{
+//   name:string;
+//   age:number;
+// }
 
 const Form = () => {
   // const nameRef = useRef<HTMLInputElement>(null);
@@ -20,7 +39,7 @@ const Form = () => {
   // };
 
   // const form = useForm();
-  const {register, handleSubmit} = useForm();
+  const {register, handleSubmit, formState:{errors}} = useForm<FormData>({resolver: zodResolver(schema)});
   // console.log(register('name'));
   
   //When we use the useForm, no need for the useState hook
@@ -51,6 +70,14 @@ const Form = () => {
           type="text"
           className="form-control"
         /> */}
+        {/* <input
+          {
+            ...register('name',{required:true, minLength:8})
+          }
+          id="name"
+          type="text"
+          className="form-control"
+        /> */}
         <input
           {
             ...register('name')
@@ -59,6 +86,10 @@ const Form = () => {
           type="text"
           className="form-control"
         />
+        {/* {errors.name?.type==='required' && <p className='text-danger'>The name field is required.</p>} */}
+        {/* {errors.name?.type==='minLength' && <p className='text-danger'>The name must be at least 8 characters.</p>} */}
+        {errors.name && <p className='text-danger'>{errors.name.message}</p>}
+
       </div>
       <div className="mb-3">
         <label htmlFor="age" className="form-label">
@@ -75,11 +106,12 @@ const Form = () => {
           className="form-control"
         /> */}
         <input
-          {...register('age')}
+          {...register('age', {valueAsNumber: true})} //valueAsNumber, takes the input as num instead of string
           id="age"
           type="number"
           className="form-control"
         />
+        {errors.age && <p className='text-danger'>{errors.age.message}</p>}
       </div>
 
       <button className="btn btn-primary" type="submit">
