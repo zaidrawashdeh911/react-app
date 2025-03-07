@@ -420,7 +420,9 @@ import Form from './components/Form';
 import React from 'react'
 import ExpenseList from './expense-tracker/components/ExpenseList';
 import ExpenseFilter from './expense-tracker/components/ExpenseFilter';
+import ExpenseForm from './expense-tracker/components/ExpenseForm';
 
+export const categories = ["Grouceries","Utilities", "Entertainment"];
 const App = () => {
   const [selectedCategory, setSelectedCategory]= useState('');
 
@@ -434,6 +436,9 @@ const App = () => {
   const visibleExpenses = selectedCategory? expenses.filter(e=>e.category=== selectedCategory): expenses;
   return (
     <div>
+      <div className="mb-5">
+        <ExpenseForm/>
+      </div>
       <div className="mb-3">
         <ExpenseFilter onSelectCategory={category=> setSelectedCategory(category)}/>
       </div>
