@@ -118,7 +118,7 @@ const Form = () => {
       </div>
 
       <button disabled ={!isValid} className="btn btn-primary" type="submit">
-        Submit
+         Submit
       </button>
     </form>
   );
