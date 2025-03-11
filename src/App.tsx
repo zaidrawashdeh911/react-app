@@ -478,21 +478,216 @@ import Form from './components/Form';
 
 /******************************************************************************************************************/
 
-import React from 'react'
-import ProductList from './components/ProductList';
+// import React from 'react'
+// import ProductList from './components/ProductList';
 
+// const App = () => {
+//   const [category, setCategory]= useState('');
+//   return (
+//     <div>
+//       <select name="" id="" className="form-select" onChange={(event)=> setCategory(event.target.value)}>
+//         <option value=""></option>
+//         <option value="Clothing">Clothing</option>
+//         <option value="Household">Household</option>
+//       </select>
+//       <ProductList category={category}/>
+//     </div>
+//   )
+// }
+
+// export default App
+
+/******************************************************************************************************************/
+// Effect clean up
+
+// const connect = ()=> console.log('Connected');
+// const disconnect = ()=> console.log('Disconnected');
+
+// const App = ()=>{
+//   useEffect(()=>{
+//     connect();
+
+//     return ()=>disconnect();
+//   })
+
+//   return <div></div>
+// }
+
+/******************************************************************************************************************/
+//Implementing fetching data and validate it
+// import axios from 'axios';
+
+// interface User{
+//   id:number;
+//   name:string;
+// }
+// const App = () => {
+//   const [users,setUsers] = useState<User[]>([]);
+//   const [error, setError]= useState('');
+
+//   useEffect(()=>{
+//     // get returns a promise, if it's resolved we get a response object else we get an error
+//     axios
+//       .get<User[]>('https://jsonplaceholder.typicode.com/Zusers')
+//       .then(res=>setUsers(res.data))
+//       .catch(err=>setError(err.message));
+//   },[])
+
+//   return (
+//   <>
+//   {/* this wraps up the error dynamically only if error is true */}
+//     {error && <p className="text-danger">{error}</p>}
+//     <ul>
+//       {users.map(user=> <li key={user.id}>{user.name}</li>)}
+//     </ul>
+//   </>
+//   );
+// }
+
+// export default App
+
+/******************************************************************************************************************/
+
+//Implementing Async and await instead of promise call back 
+
+// import axios, { AxiosError } from 'axios';
+
+// interface User{
+//   id:number;
+//   name:string;
+// }
+// const App = () => {
+//   const [users,setUsers] = useState<User[]>([]);
+//   const [error, setError]= useState('');
+
+//   useEffect(()=>{
+//     const fetchUsers = async () =>{
+//       try{
+//         // get => await promise => res / err
+//         const res= await axios
+//         .get<User[]>('https://jsonplaceholder.typicode.com/Zusers')
+//         // .then(res=>setUsers(res.data))
+//         // .catch(err=>setError(err.message));
+//         setUsers(res.data)
+//       }
+//       catch(err){
+//         setError((err as AxiosError).message);
+//       }
+//     }
+
+//     fetchUsers();
+//   },[])
+
+//   return (
+//   <>
+//   {/* this wraps up the error dynamically only if error is true */}
+//     {error && <p className="text-danger">{error}</p>}
+//     <ul>
+//       {users.map(user=> <li key={user.id}>{user.name}</li>)}
+//     </ul>
+//   </>
+//   );
+// }
+
+// export default App
+
+/******************************************************************************************************************/
+
+// import axios, { AxiosError } from 'axios';
+
+// interface User{
+//   id:number;
+//   name:string;
+// }
+// const App = () => {
+//   const [users,setUsers] = useState<User[]>([]);
+//   const [error, setError]= useState('');
+
+//   useEffect(()=>{
+//     const controller = new AbortController();
+
+//     const fetchUsers = async () =>{
+//       try{
+//         // get => await promise => res / err
+//         // the second argument in the .get is a configuration object
+//         const res= await axios
+//         .get<User[]>('https://jsonplaceholder.typicode.com/Zusers', {signal: controller.signal})
+//         // .then(res=>setUsers(res.data))
+//         // .catch(err=>setError(err.message));
+//         setUsers(res.data)
+//       }
+//       catch(err){
+//         setError((err as AxiosError).message);
+//       }
+//     }
+
+//     fetchUsers();
+//   },[])
+
+//   return (
+//   <>
+//   {/* this wraps up the error dynamically only if error is true */}
+//     {error && <p className="text-danger">{error}</p>}
+//     <ul>
+//       {users.map(user=> <li key={user.id}>{user.name}</li>)}
+//     </ul>
+//   </>
+//   );
+// }
+
+// export default App
+
+/******************************************************************************************************************/
+//Canceling Fetch request and showing loading indicator
+
+import axios, { CanceledError } from 'axios';
+
+interface User{
+  id:number;
+  name:string;
+}
 const App = () => {
-  const [category, setCategory]= useState('');
+  const [users,setUsers] = useState<User[]>([]);
+  const [error, setError]= useState('');
+  const [isLoading, setLoading] = useState(false);
+
+  useEffect(()=>{
+    const controller = new AbortController();
+
+    setLoading(true);
+
+    // get returns a promise, if it's resolved we get a response object else we get an error
+    axios
+      .get<User[]>('https://jsonplaceholder.typicode.com/users', {signal: controller.signal})
+      .then(res=>{
+        setUsers(res.data)
+        setLoading(false);
+        // order isn't importnant because jsx renders the component once
+      })
+      .catch(err=>{
+        if(err instanceof CanceledError) return;
+        setLoading(false);
+        setError(err.message);
+      });
+      //this is the better way, but doesn't work in development mode (strict mode on)
+      //other way is duplicate the call in then and catch callback functions
+      // .finally(()=>{
+      //   setLoading(false);
+      // });
+
+      return ()=> controller.abort();
+  },[])
+
   return (
-    <div>
-      <select name="" id="" className="form-select" onChange={(event)=> setCategory(event.target.value)}>
-        <option value=""></option>
-        <option value="Clothing">Clothing</option>
-        <option value="Household">Household</option>
-      </select>
-      <ProductList category={category}/>
-    </div>
-  )
+  <>
+  {/* this logic renders the html element only if the variable before is true */}
+    {error && <p className="text-danger">{error}</p>}
+    {isLoading && <div className="spinner-boarder"></div>}
+    <ul>
+      {users.map(user=> <li key={user.id}>{user.name}</li>)}
+    </ul>
+  </>
+  );
 }
 
 export default App
