@@ -1,6 +1,6 @@
 // // import ListGroup from './components/ListGroup';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ExpandableText from './components/ExpandableText';
 import Form from './components/Form';
 
@@ -417,34 +417,783 @@ import Form from './components/Form';
 
 /******************************************************************************************************************/
 
-import React from 'react'
-import ExpenseList from './expense-tracker/components/ExpenseList';
-import ExpenseFilter from './expense-tracker/components/ExpenseFilter';
-import ExpenseForm from './expense-tracker/components/ExpenseForm';
+// import React from 'react'
+// import ExpenseList from './expense-tracker/components/ExpenseList';
+// import ExpenseFilter from './expense-tracker/components/ExpenseFilter';
+// import ExpenseForm from './expense-tracker/components/ExpenseForm';
+// import categories from './expense-tracker/categories';
+// const App = () => {
+//   const [selectedCategory, setSelectedCategory]= useState('');
 
-export const categories = ["Grouceries","Utilities", "Entertainment"];
+//   const [expenses, setExpenses]=useState([
+//     {id:1, description:'aaa', amount:10, category: 'Utilities'},
+//     {id:2, description:'bbb', amount:10, category: 'Entertainment'},
+//     {id:3, description:'ccc', amount:10, category: 'Groceries'},
+//     {id:4, description:'fff', amount:10, category: 'Utilities'},
+//   ])
+
+//   const visibleExpenses = selectedCategory? expenses.filter(e=>e.category=== selectedCategory): expenses;
+//   return (
+//     <div>
+//       <div className="mb-5">
+//         <ExpenseForm onSubmit={expense=> setExpenses([...expenses, {...expense, id: expenses.length+1}])}/>
+//       </div>
+//       <div className="mb-3">
+//         <ExpenseFilter onSelectCategory={category=> setSelectedCategory(category)}/>
+//       </div>
+//       <ExpenseList expenses={visibleExpenses} onDelete={(id)=> setExpenses(expenses.filter(e=>e.id != id))}></ExpenseList>
+//     </div>
+//   )
+// }
+
+// export default App
+
+/******************************************************************************************************************/
+
+// import React from 'react'
+
+// const App = () => {
+//   const ref = useRef<HTMLInputElement>(null);
+
+//   //The use effect hook makes our component a pure component\
+//   //This happens after render
+//   useEffect(()=>{
+//     //This code has side effect only
+//     if(ref.current) ref.current.focus();
+//   });
+
+//   //We can use the useEffect hook multiple times for different purpose
+//   useEffect(()=>{
+//     document.title='My App'
+//   });
+
+//   return (
+//     <div>
+//       <input ref={ref} type="text" className="form-input" />
+//     </div>
+//   )
+// }
+
+// export default App
+
+/******************************************************************************************************************/
+
+// import React from 'react'
+// import ProductList from './components/ProductList';
+
+// const App = () => {
+//   const [category, setCategory]= useState('');
+//   return (
+//     <div>
+//       <select name="" id="" className="form-select" onChange={(event)=> setCategory(event.target.value)}>
+//         <option value=""></option>
+//         <option value="Clothing">Clothing</option>
+//         <option value="Household">Household</option>
+//       </select>
+//       <ProductList category={category}/>
+//     </div>
+//   )
+// }
+
+// export default App
+
+/******************************************************************************************************************/
+// Effect clean up
+
+// const connect = ()=> console.log('Connected');
+// const disconnect = ()=> console.log('Disconnected');
+
+// const App = ()=>{
+//   useEffect(()=>{
+//     connect();
+
+//     return ()=>disconnect();
+//   })
+
+//   return <div></div>
+// }
+
+/******************************************************************************************************************/
+//Implementing fetching data and validate it
+// import axios from 'axios';
+
+// interface User{
+//   id:number;
+//   name:string;
+// }
+// const App = () => {
+//   const [users,setUsers] = useState<User[]>([]);
+//   const [error, setError]= useState('');
+
+//   useEffect(()=>{
+//     // get returns a promise, if it's resolved we get a response object else we get an error
+//     axios
+//       .get<User[]>('https://jsonplaceholder.typicode.com/Zusers')
+//       .then(res=>setUsers(res.data))
+//       .catch(err=>setError(err.message));
+//   },[])
+
+//   return (
+//   <>
+//   {/* this wraps up the error dynamically only if error is true */}
+//     {error && <p className="text-danger">{error}</p>}
+//     <ul>
+//       {users.map(user=> <li key={user.id}>{user.name}</li>)}
+//     </ul>
+//   </>
+//   );
+// }
+
+// export default App
+
+/******************************************************************************************************************/
+
+//Implementing Async and await instead of promise call back 
+
+// import axios, { AxiosError } from 'axios';
+
+// interface User{
+//   id:number;
+//   name:string;
+// }
+// const App = () => {
+//   const [users,setUsers] = useState<User[]>([]);
+//   const [error, setError]= useState('');
+
+//   useEffect(()=>{
+//     const fetchUsers = async () =>{
+//       try{
+//         // get => await promise => res / err
+//         const res= await axios
+//         .get<User[]>('https://jsonplaceholder.typicode.com/Zusers')
+//         // .then(res=>setUsers(res.data))
+//         // .catch(err=>setError(err.message));
+//         setUsers(res.data)
+//       }
+//       catch(err){
+//         setError((err as AxiosError).message);
+//       }
+//     }
+
+//     fetchUsers();
+//   },[])
+
+//   return (
+//   <>
+//   {/* this wraps up the error dynamically only if error is true */}
+//     {error && <p className="text-danger">{error}</p>}
+//     <ul>
+//       {users.map(user=> <li key={user.id}>{user.name}</li>)}
+//     </ul>
+//   </>
+//   );
+// }
+
+// export default App
+
+/******************************************************************************************************************/
+
+// import axios, { AxiosError } from 'axios';
+
+// interface User{
+//   id:number;
+//   name:string;
+// }
+// const App = () => {
+//   const [users,setUsers] = useState<User[]>([]);
+//   const [error, setError]= useState('');
+
+//   useEffect(()=>{
+//     const controller = new AbortController();
+
+//     const fetchUsers = async () =>{
+//       try{
+//         // get => await promise => res / err
+//         // the second argument in the .get is a configuration object
+//         const res= await axios
+//         .get<User[]>('https://jsonplaceholder.typicode.com/Zusers', {signal: controller.signal})
+//         // .then(res=>setUsers(res.data))
+//         // .catch(err=>setError(err.message));
+//         setUsers(res.data)
+//       }
+//       catch(err){
+//         setError((err as AxiosError).message);
+//       }
+//     }
+
+//     fetchUsers();
+//   },[])
+
+//   return (
+//   <>
+//   {/* this wraps up the error dynamically only if error is true */}
+//     {error && <p className="text-danger">{error}</p>}
+//     <ul>
+//       {users.map(user=> <li key={user.id}>{user.name}</li>)}
+//     </ul>
+//   </>
+//   );
+// }
+
+// export default App
+
+/******************************************************************************************************************/
+//Canceling Fetch request and showing loading indicator
+
+// import axios, { CanceledError } from 'axios';
+
+// interface User{
+//   id:number;
+//   name:string;
+// }
+// const App = () => {
+//   const [users,setUsers] = useState<User[]>([]);
+//   const [error, setError]= useState('');
+//   const [isLoading, setLoading] = useState(false);
+
+//   useEffect(()=>{
+//     const controller = new AbortController();
+
+//     setLoading(true);
+
+//     // get returns a promise, if it's resolved we get a response object else we get an error
+//     axios
+//       .get<User[]>('https://jsonplaceholder.typicode.com/users', {signal: controller.signal})
+//       .then(res=>{
+//         setUsers(res.data)
+//         setLoading(false);
+//         // order isn't importnant because jsx renders the component once
+//       })
+//       .catch(err=>{
+//         if(err instanceof CanceledError) return;
+//         setLoading(false);
+//         setError(err.message);
+//       });
+//       //this is the better way, but doesn't work in development mode (strict mode on)
+//       //other way is duplicate the call in then and catch callback functions
+//       // .finally(()=>{
+//       //   setLoading(false);
+//       // });
+
+//       return ()=> controller.abort();
+//   },[])
+
+//   return (
+//   <>
+//   {/* this logic renders the html element only if the variable before is true */}
+//     {error && <p className="text-danger">{error}</p>}
+//     {isLoading && <div className="spinner-boarder"></div>}
+//     <ul>
+//       {users.map(user=> <li key={user.id}>{user.name}</li>)}
+//     </ul>
+//   </>
+//   );
+// }
+
+// export default App;
+
+/******************************************************************************************************************/
+
+//Deleting Data
+
+// import axios, { CanceledError } from 'axios';
+
+// interface User{
+//   id:number;
+//   name:string;
+// }
+// const App = () => {
+//   const [users,setUsers] = useState<User[]>([]);
+//   const [error, setError]= useState('');
+//   const [isLoading, setLoading] = useState(false);
+
+//   useEffect(()=>{
+//     const controller = new AbortController();
+
+//     setLoading(true);
+
+//     // get returns a promise, if it's resolved we get a response object else we get an error
+//     axios
+//       .get<User[]>('https://jsonplaceholder.typicode.com/users', {signal: controller.signal})
+//       .then(res=>{
+//         setUsers(res.data)
+//         setLoading(false);
+//         // order isn't importnant because jsx renders the component once
+//       })
+//       .catch(err=>{
+//         if(err instanceof CanceledError) return;
+//         setLoading(false);
+//         setError(err.message);
+//       });
+
+//       return ()=> controller.abort();
+//   },[]);
+
+//   const deleteUser = (user:User)=>{
+//     const originalUsers = [...users];
+//     setUsers(users.filter(u => u.id !== user.id));
+//     axios.delete('https://jsonplaceholder.typicode.com/users/' + user.id)
+//     .catch(err=>{
+//       setError(err.message);
+//       setUsers(originalUsers);
+//     })
+//   }
+
+//   return (
+//   <>
+//   {/* this logic renders the html element only if the variable before is true */}
+//     {error && <p className="text-danger">{error}</p>}
+//     {isLoading && <div className="spinner-boarder"></div>}
+//     <ul className='list-group'>
+//       {users.map(user=>
+//       <li key={user.id} className='list-group-item d-flex justify-content-between'>
+//         {user.name}
+//       <button className="btn btn-outline-danger" onClick={()=> deleteUser(user)}>Delete</button>
+//       </li>)}
+//     </ul>
+//   </>
+//   );
+// }
+
+// export default App;
+
+/******************************************************************************************************************/
+// creating data
+
+// import axios, { CanceledError } from 'axios';
+
+// interface User{
+//   id:number;
+//   name:string;
+// }
+// const App = () => {
+//   const [users,setUsers] = useState<User[]>([]);
+//   const [error, setError]= useState('');
+//   const [isLoading, setLoading] = useState(false);
+
+//   useEffect(()=>{
+//     const controller = new AbortController();
+
+//     setLoading(true);
+
+//     // get returns a promise, if it's resolved we get a response object else we get an error
+//     axios
+//       .get<User[]>('https://jsonplaceholder.typicode.com/users', {signal: controller.signal})
+//       .then(res=>{
+//         setUsers(res.data)
+//         setLoading(false);
+//         // order isn't importnant because jsx renders the component once
+//       })
+//       .catch(err=>{
+//         if(err instanceof CanceledError) return;
+//         setLoading(false);
+//         setError(err.message);
+//       });
+
+//       return ()=> controller.abort();
+//   },[]);
+
+//   const deleteUser = (user:User)=>{
+//     const originalUsers = [...users];
+//     setUsers(users.filter(u => u.id !== user.id));
+//     axios.delete('https://jsonplaceholder.typicode.com/users/' + user.id)
+//     .catch(err=>{
+//       setError(err.message);
+//       setUsers(originalUsers);
+//     })
+//   }
+
+//   const addUser= ()=>{
+//     const originalUsers = [...users];
+//     const newUser= {id:0, name:'Mosh'};
+//     setUsers([newUser,...users]);
+
+//     axios.post('https://jsonplaceholder.typicode.com/users', newUser)
+//     // .then(res=> setUsers([res.data,...users]));
+//     // another way is to destructure the response
+//     // savedUser is just an alias for data object to make the code more readable
+//     .then(({data: savedUser})=> setUsers([savedUser,...users]))
+//     .catch(err=>{
+//       setError(err.message);
+//       setUsers(originalUsers);
+//     })
+//   }
+
+//   return (
+//   <>
+//   {/* this logic renders the html element only if the variable before is true */}
+//     {error && <p className="text-danger">{error}</p>}
+//     {isLoading && <div className="spinner-boarder"></div>}
+
+//     <button className="btn btn-primary mb-3" onClick={addUser}>Add</button>
+//     <ul className='list-group'>
+//       {users.map(user=>
+//       <li key={user.id} className='list-group-item d-flex justify-content-between'>
+//         {user.name}
+//       <button className="btn btn-outline-danger" onClick={()=> deleteUser(user)}>Delete</button>
+//       </li>)}
+//     </ul>
+//   </>
+//   );
+// }
+
+// export default App;
+
+/******************************************************************************************************************/
+
+//Updating Data
+
+// import axios, { CanceledError } from 'axios';
+
+// interface User{
+//   id:number;
+//   name:string;
+// }
+// const App = () => {
+//   const [users,setUsers] = useState<User[]>([]);
+//   const [error, setError]= useState('');
+//   const [isLoading, setLoading] = useState(false);
+
+//   useEffect(()=>{
+//     const controller = new AbortController();
+
+//     setLoading(true);
+
+//     // get returns a promise, if it's resolved we get a response object else we get an error
+//     axios
+//       .get<User[]>('https://jsonplaceholder.typicode.com/users', {signal: controller.signal})
+//       .then(res=>{
+//         setUsers(res.data)
+//         setLoading(false);
+//         // order isn't importnant because jsx renders the component once
+//       })
+//       .catch(err=>{
+//         if(err instanceof CanceledError) return;
+//         setLoading(false);
+//         setError(err.message);
+//       });
+
+//       return ()=> controller.abort();
+//   },[]);
+
+//   const deleteUser = (user:User)=>{
+//     const originalUsers = [...users];
+//     setUsers(users.filter(u => u.id !== user.id));
+//     axios.delete('https://jsonplaceholder.typicode.com/users/' + user.id)
+//     .catch(err=>{
+//       setError(err.message);
+//       setUsers(originalUsers);
+//     })
+//   }
+
+//   const addUser= ()=>{
+//     const originalUsers = [...users];
+//     const newUser= {id:0, name:'Mosh'};
+//     setUsers([newUser,...users]);
+
+//     axios.post('https://jsonplaceholder.typicode.com/users', newUser)
+//     // .then(res=> setUsers([res.data,...users]));
+//     // another way is to destructure the response
+//     // savedUser is just an alias for data object to make the code more readable
+//     .then(({data: savedUser})=> setUsers([savedUser,...users]))
+//     .catch(err=>{
+//       setError(err.message);
+//       setUsers(originalUsers);
+//     })
+//   }
+
+//   const updateUser = (user:User)=>{
+//     const originalUsers = [...users];
+
+//     const updatedUser = {...user, name:user.name + ' !'}
+//     setUsers(users.map(u=> u.id === user.id? updatedUser: u))
+
+//     axios
+//       .patch('https://jsonplaceholder.typicode.com/users/'+ user.id, updatedUser)
+//       .catch(err=>{
+//         setError(err.message);
+//         setUsers(originalUsers);
+//       })
+//   }
+
+//   return (
+//   <>
+//   {/* this logic renders the html element only if the variable before is true */}
+//     {error && <p className="text-danger">{error}</p>}
+//     {isLoading && <div className="spinner-boarder"></div>}
+
+//     <button className="btn btn-primary mb-3" onClick={addUser}>Add</button>
+//     <ul className='list-group'>
+//       {users.map(user=>
+//       <li key={user.id} className='list-group-item d-flex justify-content-between'>
+//         {user.name}
+//         <div>
+//           <button className="btn btn-outline-secondary mx-1" onClick={()=> updateUser(user)}>Update</button>
+//           <button className="btn btn-outline-danger" onClick={()=> deleteUser(user)}>Delete</button>
+//         </div>
+//       </li>)}
+//     </ul>
+//   </>
+//   );
+// }
+
+// export default App;
+
+// /******************************************************************************************************************/
+
+// import apiClient, { CanceledError} from './services/api-client';
+// interface User{
+//   id:number;
+//   name:string;
+// }
+// const App = () => {
+//   const [users,setUsers] = useState<User[]>([]);
+//   const [error, setError]= useState('');
+//   const [isLoading, setLoading] = useState(false);
+
+//   useEffect(()=>{
+//     const controller = new AbortController();
+
+//     setLoading(true);
+
+//     // get returns a promise, if it's resolved we get a response object else we get an error
+//     apiClient
+//       .get<User[]>('/users', {signal: controller.signal})
+//       .then(res=>{
+//         setUsers(res.data)
+//         setLoading(false);
+//         // order isn't importnant because jsx renders the component once
+//       })
+//       .catch(err=>{
+//         if(err instanceof CanceledError) return;
+//         setLoading(false);
+//         setError(err.message);
+//       });
+
+//       return ()=> controller.abort();
+//   },[]);
+
+//   const deleteUser = (user:User)=>{
+//     const originalUsers = [...users];
+//     setUsers(users.filter(u => u.id !== user.id));
+//     apiClient.delete('/users/' + user.id)
+//     .catch(err=>{
+//       setError(err.message);
+//       setUsers(originalUsers);
+//     })
+//   }
+
+//   const addUser= ()=>{
+//     const originalUsers = [...users];
+//     const newUser= {id:0, name:'Mosh'};
+//     setUsers([newUser,...users]);
+
+//     apiClient.post('/users', newUser)
+//     // .then(res=> setUsers([res.data,...users]));
+//     // another way is to destructure the response
+//     // savedUser is just an alias for data object to make the code more readable
+//     .then(({data: savedUser})=> setUsers([...users, savedUser]))
+//     .catch(err=>{
+//       setError(err.message);
+//       setUsers(originalUsers);
+//     })
+//   }
+
+//   const updateUser = (user:User)=>{
+//     const originalUsers = [...users];
+
+//     const updatedUser = {...user, name:user.name + ' !'}
+//     setUsers(users.map(u=> u.id === user.id? updatedUser: u))
+
+//     apiClient
+//       .patch('/users/'+ user.id, updatedUser)
+//       .catch(err=>{
+//         setError(err.message);
+//         setUsers(originalUsers);
+//       })
+//   }
+
+//   return (
+//   <>
+//   {/* this logic renders the html element only if the variable before is true */}
+//     {error && <p className="text-danger">{error}</p>}
+//     {isLoading && <div className="spinner-boarder"></div>}
+
+//     <button className="btn btn-primary mb-3" onClick={addUser}>Add</button>
+//     <ul className='list-group'>
+//       {users.map(user=>
+//       <li key={user.id} className='list-group-item d-flex justify-content-between'>
+//         {user.name}
+//         <div>
+//           <button className="btn btn-outline-secondary mx-1" onClick={()=> updateUser(user)}>Update</button>
+//           <button className="btn btn-outline-danger" onClick={()=> deleteUser(user)}>Delete</button>
+//         </div>
+//       </li>)}
+//     </ul>
+//   </>
+//   );
+// }
+
+// export default App;
+
+/******************************************************************************************************************/
+
+// import { CanceledError} from './services/api-client';
+// import userService, { User } from './services/user-service';
+
+// const App = () => {
+//   const [users,setUsers] = useState<User[]>([]);
+//   const [error, setError]= useState('');
+//   const [isLoading, setLoading] = useState(false);
+
+//   useEffect(()=>{
+//     setLoading(true);
+//     // get returns a promise, if it's resolved we get a response object else we get an error
+//     const {request, cancel}= userService.getAll<User>()
+//       request.then(res=>{
+//         setUsers(res.data)
+//         setLoading(false);
+//         // order isn't importnant because jsx renders the component once
+//       })
+//       .catch(err=>{
+//         if(err instanceof CanceledError) return;
+//         setLoading(false);
+//         setError(err.message);
+//       });
+
+//       return ()=> cancel();
+//   },[]);
+
+//   const deleteUser = (user:User)=>{
+//     const originalUsers = [...users];
+//     setUsers(users.filter(u => u.id !== user.id));
+//     userService.delete(user.id)
+//     .catch(err=>{
+//       setError(err.message);
+//       setUsers(originalUsers);
+//     })
+//   }
+
+//   const addUser= ()=>{
+//     const originalUsers = [...users];
+//     const newUser= {id:0, name:'Mosh'};
+//     setUsers([newUser,...users]);
+
+//     userService.create(newUser)
+//     // .then(res=> setUsers([res.data,...users]));
+//     // another way is to destructure the response
+//     // savedUser is just an alias for data object to make the code more readable
+//     .then(({data: savedUser})=> setUsers([...users, savedUser]))
+//     .catch(err=>{
+//       setError(err.message);
+//       setUsers(originalUsers);
+//     })
+//   }
+
+//   const updateUser = (user:User)=>{
+//     const originalUsers = [...users];
+
+//     const updatedUser = {...user, name:user.name + ' !'}
+//     setUsers(users.map(u=> u.id === user.id? updatedUser: u))
+//     userService
+//     .update(updatedUser)
+//     .catch(err=>{
+//       setError(err.message);
+//       setUsers(originalUsers);
+//     })
+//   }
+
+//   return (
+//   <>
+//   {/* this logic renders the html element only if the variable before is true */}
+//     {error && <p className="text-danger">{error}</p>}
+//     {isLoading && <div className="spinner-boarder"></div>}
+
+//     <button className="btn btn-primary mb-3" onClick={addUser}>Add</button>
+//     <ul className='list-group'>
+//       {users.map(user=>
+//       <li key={user.id} className='list-group-item d-flex justify-content-between'>
+//         {user.name}
+//         <div>
+//           <button className="btn btn-outline-secondary mx-1" onClick={()=> updateUser(user)}>Update</button>
+//           <button className="btn btn-outline-danger" onClick={()=> deleteUser(user)}>Delete</button>
+//         </div>
+//       </li>)}
+//     </ul>
+//   </>
+//   );
+// }
+
+// export default App;
+
+/******************************************************************************************************************/
+
+//Create a custom hook
+
+import userService, { User } from './services/user-service';
+import useUsers from './hooks/useUsers';
+
 const App = () => {
-  const [selectedCategory, setSelectedCategory]= useState('');
+  const {users, error, isLoading, setUsers, setError}=useUsers();
 
-  const [expenses, setExpenses]=useState([
-    {id:1, description:'aaa', amount:10, category: 'Utilities'},
-    {id:2, description:'bbb', amount:10, category: 'Entertainment'},
-    {id:3, description:'ccc', amount:10, category: 'Groceries'},
-    {id:4, description:'fff', amount:10, category: 'Utilities'},
-  ])
+  const deleteUser = (user:User)=>{
+    const originalUsers = [...users];
+    setUsers(users.filter(u => u.id !== user.id));
+    userService.delete(user.id)
+    .catch(err=>{
+      setError(err.message);
+      setUsers(originalUsers);
+    })
+  }
 
-  const visibleExpenses = selectedCategory? expenses.filter(e=>e.category=== selectedCategory): expenses;
+  const addUser= ()=>{
+    const originalUsers = [...users];
+    const newUser= {id:0, name:'Mosh'};
+    setUsers([newUser,...users]);
+
+    userService.create(newUser)
+    // .then(res=> setUsers([res.data,...users]));
+    // another way is to destructure the response
+    // savedUser is just an alias for data object to make the code more readable
+    .then(({data: savedUser})=> setUsers([...users, savedUser]))
+    .catch(err=>{
+      setError(err.message);
+      setUsers(originalUsers);
+    })
+  }
+
+  const updateUser = (user:User)=>{
+    const originalUsers = [...users];
+
+    const updatedUser = {...user, name:user.name + ' !'}
+    setUsers(users.map(u=> u.id === user.id? updatedUser: u))
+    userService
+    .update(updatedUser)
+    .catch(err=>{
+      setError(err.message);
+      setUsers(originalUsers);
+    })
+  }
+
   return (
-    <div>
-      <div className="mb-5">
-        <ExpenseForm/>
-      </div>
-      <div className="mb-3">
-        <ExpenseFilter onSelectCategory={category=> setSelectedCategory(category)}/>
-      </div>
-      <ExpenseList expenses={visibleExpenses} onDelete={(id)=> setExpenses(expenses.filter(e=>e.id != id))}></ExpenseList>
-    </div>
-  )
+  <>
+  {/* this logic renders the html element only if the variable before is true */}
+    {error && <p className="text-danger">{error}</p>}
+    {isLoading && <div className="spinner-boarder"></div>}
+
+    <button className="btn btn-primary mb-3" onClick={addUser}>Add</button>
+    <ul className='list-group'>
+      {users.map(user=>
+      <li key={user.id} className='list-group-item d-flex justify-content-between'>
+        {user.name}
+        <div>
+          <button className="btn btn-outline-secondary mx-1" onClick={()=> updateUser(user)}>Update</button>
+          <button className="btn btn-outline-danger" onClick={()=> deleteUser(user)}>Delete</button>
+        </div>
+      </li>)}
+    </ul>
+  </>
+  );
 }
 
-export default App
+export default App;
