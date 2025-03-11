@@ -1047,12 +1047,9 @@ const App = () => {
   const [isLoading, setLoading] = useState(false);
 
   useEffect(()=>{
-    
-
     setLoading(true);
-
     // get returns a promise, if it's resolved we get a response object else we get an error
-    const {request, cancel}= userService.getAllUsers()
+    const {request, cancel}= userService.getAll<User>()
       request.then(res=>{
         setUsers(res.data)
         setLoading(false);
@@ -1070,7 +1067,7 @@ const App = () => {
   const deleteUser = (user:User)=>{
     const originalUsers = [...users];
     setUsers(users.filter(u => u.id !== user.id));
-    userService.deleteUser(user.id)
+    userService.delete(user.id)
     .catch(err=>{
       setError(err.message);
       setUsers(originalUsers);
@@ -1082,7 +1079,7 @@ const App = () => {
     const newUser= {id:0, name:'Mosh'};
     setUsers([newUser,...users]);
 
-    userService.createUser(newUser)
+    userService.create(newUser)
     // .then(res=> setUsers([res.data,...users]));
     // another way is to destructure the response
     // savedUser is just an alias for data object to make the code more readable
@@ -1098,12 +1095,12 @@ const App = () => {
 
     const updatedUser = {...user, name:user.name + ' !'}
     setUsers(users.map(u=> u.id === user.id? updatedUser: u))
-
-      userService.updateUser(updatedUser)
-      .catch(err=>{
-        setError(err.message);
-        setUsers(originalUsers);
-      })
+    userService
+    .update(updatedUser)
+    .catch(err=>{
+      setError(err.message);
+      setUsers(originalUsers);
+    })
   }
 
   return (
