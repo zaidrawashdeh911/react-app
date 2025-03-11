@@ -640,6 +640,62 @@ import Form from './components/Form';
 /******************************************************************************************************************/
 //Canceling Fetch request and showing loading indicator
 
+// import axios, { CanceledError } from 'axios';
+
+// interface User{
+//   id:number;
+//   name:string;
+// }
+// const App = () => {
+//   const [users,setUsers] = useState<User[]>([]);
+//   const [error, setError]= useState('');
+//   const [isLoading, setLoading] = useState(false);
+
+//   useEffect(()=>{
+//     const controller = new AbortController();
+
+//     setLoading(true);
+
+//     // get returns a promise, if it's resolved we get a response object else we get an error
+//     axios
+//       .get<User[]>('https://jsonplaceholder.typicode.com/users', {signal: controller.signal})
+//       .then(res=>{
+//         setUsers(res.data)
+//         setLoading(false);
+//         // order isn't importnant because jsx renders the component once
+//       })
+//       .catch(err=>{
+//         if(err instanceof CanceledError) return;
+//         setLoading(false);
+//         setError(err.message);
+//       });
+//       //this is the better way, but doesn't work in development mode (strict mode on)
+//       //other way is duplicate the call in then and catch callback functions
+//       // .finally(()=>{
+//       //   setLoading(false);
+//       // });
+
+//       return ()=> controller.abort();
+//   },[])
+
+//   return (
+//   <>
+//   {/* this logic renders the html element only if the variable before is true */}
+//     {error && <p className="text-danger">{error}</p>}
+//     {isLoading && <div className="spinner-boarder"></div>}
+//     <ul>
+//       {users.map(user=> <li key={user.id}>{user.name}</li>)}
+//     </ul>
+//   </>
+//   );
+// }
+
+// export default App;
+
+/******************************************************************************************************************/
+
+//Deleting Data
+
 import axios, { CanceledError } from 'axios';
 
 interface User{
@@ -669,25 +725,34 @@ const App = () => {
         setLoading(false);
         setError(err.message);
       });
-      //this is the better way, but doesn't work in development mode (strict mode on)
-      //other way is duplicate the call in then and catch callback functions
-      // .finally(()=>{
-      //   setLoading(false);
-      // });
 
       return ()=> controller.abort();
-  },[])
+  },[]);
+
+  const deleteUser = (user:User)=>{
+    const originalUsers = [...users];
+    setUsers(users.filter(u => u.id !== user.id));
+    axios.delete('https://jsonplaceholder.typicode.com/users/' + user.id)
+    .catch(err=>{
+      setError(err.message);
+      setUsers(originalUsers);
+    })
+  }
 
   return (
   <>
   {/* this logic renders the html element only if the variable before is true */}
     {error && <p className="text-danger">{error}</p>}
     {isLoading && <div className="spinner-boarder"></div>}
-    <ul>
-      {users.map(user=> <li key={user.id}>{user.name}</li>)}
+    <ul className='list-group'>
+      {users.map(user=>
+      <li key={user.id} className='list-group-item d-flex justify-content-between'>
+        {user.name}
+      <button className="btn btn-outline-danger" onClick={()=> deleteUser(user)}>Delete</button>
+      </li>)}
     </ul>
   </>
   );
 }
 
-export default App
+export default App;
